@@ -1,9 +1,37 @@
 document.addEventListener("DOMContentLoaded", function () {
+
     // Get the canvas element and its 2d context
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
 
     // Load the graph image onto the canvas
+    // Get the input element for file selection
+    var imageInput = document.getElementById("imageInput");
+
+    imageInput.addEventListener("change", function (event) {
+        // Load the selected image onto the canvas
+        var selectedImage = event.target.files[0];
+        if (selectedImage) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var img = new Image();
+                img.src = e.target.result;
+
+                img.onload = function () {
+                    // Set the canvas size to match the image size
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    // Draw the loaded image on the canvas
+                    ctx.drawImage(img, 0, 0, img.width, img.height);
+                };
+            };
+
+            reader.readAsDataURL(selectedImage);
+        }
+    });
+    // load the graph image from an input file 
     var graphImage = new Image();
     graphImage.src = "./img/graph.png";
 
@@ -40,7 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to follow the same color path and add red dots along the graph
     function followColorPath(startX, startY, targetR, targetG, targetB) {
         // Set a threshold for color matching (adjust as needed)
-        var colorThreshold = 30;
+        var colorThreshold = 10;
+        const pathArray = []
+        const fillColor = randomColor()
 
         // Loop through the canvas pixels to find the same color path
         for (var i = 0; i < canvas.width; i++) {
@@ -54,13 +84,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     Math.abs(currentPixel[2] - targetB) < colorThreshold
                 ) {
                     // Add a red dot at the found position
-                    ctx.fillStyle = "red";
-                    ctx.fillRect(i, j, 2, 2); // Adjust the size of the red dot as needed
+                    ctx.fillStyle = fillColor;
+                    ctx.fillRect(i, j, 4, 4); // Adjust the size of the red dot as needed
+                    pathArray.push({ x: i, y: j })
 
                 }
             }
+
         }
+
+        console.log("Path Array: ", pathArray)
+
+
     }
-
-
 });
+
+
+const randomColor = () => {
+    return `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
+}
