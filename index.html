@@ -4,13 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      #canvas-container {
+        position: relative;
+      }
+
+      .point {
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+        position: absolute;
+        cursor: pointer;
+        color:black;
+      }
+      .marker{
+
+        border: none;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font: 5px;
+        width: 60px;
+        border-radius: 50%;
+        background-color: red;
+      }
+    </style>
   </head>
   <body>
-    <input type="file" id="imageInput" accept="image/*" />
-    <canvas id="canvas"></canvas>
-    <div id="magnifier"></div>
-
+    <div id="canvas-container">
+      <canvas id="canvas" width="800" height="600"></canvas>
+      <div id="magnifier"></div>
+      <div class="point" id="xmax">xmax</div>
+      <div class="point" id="ymax">ymax</div>
+      <div class="point" id="xmin">xmin</div>
+      <div class="point" id="ymin">ymin</div>
+    </div>
+    <button class="marker" onclick="toggleMarker()" id="marker">Marker</button>
+    <button class="marker" onclick="calculateData()">Calculate</button>
+    <div id="coordinates-section">
+      <label for="xminInput">xmin:</label>
+      <input type="number" id="xminInput" />
+      <label for="yminInput">ymin:</label>
+      <input type="number" id="yminInput" />
+      <label for="xmaxInput">xmax:</label>
+      <input type="number" id="xmaxInput" />
+      <label for="ymaxInput">ymax:</label>
+      <input type="number" id="ymaxInput" />
+      <button onclick="setCoordinateValue()">Set Coordinates</button>
+    </div>
     <script src="./js/main.js"></script>
     <script src="./js/cursor.js"></script>
+    <script></script>
   </body>
 </html>

@@ -507,7 +507,7 @@ function BezierPath(startPoint) {
     var current = my.head;
     while (current != null) {
       current.draw(ctx);
-      
+
       current = current.next;
     }
   };
