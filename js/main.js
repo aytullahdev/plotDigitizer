@@ -68,6 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to follow the same color path and add red dots along the graph
     function followColorPath(startX, startY, targetR, targetG, targetB) {
         // Set a threshold for color matching (adjust as needed)
+        let start = Date.now();
+
+
         var colorThreshold = 10;
         const pathArray = []
         const fillColor = randomColor()
@@ -92,6 +95,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
         }
+        let timeTaken = Date.now() - start;
+        console.log("Total time taken : " + timeTaken + " milliseconds");
 
         console.log("Path Array: ", pathArray)
 
@@ -102,4 +107,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const randomColor = () => {
     return `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
+}
+
+function optimized() {
+    // Get the entire canvas image data
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var data = imageData.data;
+
+    // Loop through the pixel data to find the same color path
+    for (var i = 0; i < data.length; i += 4) {
+        var red = data[i];
+        var green = data[i + 1];
+        var blue = data[i + 2];
+
+        // Check if the current pixel color is close to the target color
+        if (
+            Math.abs(red - targetR) < colorThreshold &&
+            Math.abs(green - targetG) < colorThreshold &&
+            Math.abs(blue - targetB) < colorThreshold
+        ) {
+            // Calculate the pixel coordinates from the index
+            var x = (i / 4) % canvas.width;
+            var y = Math.floor(i / 4 / canvas.width);
+
+            // Add a red dot at the found position
+            ctx.fillStyle = fillColor;
+            ctx.fillRect(x, y, 4, 4); // Adjust the size of the red dot as needed
+            pathArray.push({ x: x, y: y });
+        }
+    }
 }
